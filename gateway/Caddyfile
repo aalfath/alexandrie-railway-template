@@ -1,0 +1,30 @@
+{
+	admin off
+	auto_https off
+	persist_config off
+}
+
+:{$PORT:8080} {
+	# Health check for Railway; answers without login.
+	handle /_health {
+		respond "ok" 200
+	}
+
+	# API
+	@api path /api /api/*
+	handle @api {
+		reverse_proxy {$BACKEND_UPSTREAM}
+	}
+
+	# Uploaded files (public bucket) and backup archives (private bucket, signed URLs only).
+	# No handle_path and no Host rewrite: S3 signatures cover the full path and the public host.
+	@objects path /alexandrie/* /alexandrie-backups/*
+	handle @objects {
+		reverse_proxy {$RUSTFS_UPSTREAM}
+	}
+
+	# Web app
+	handle {
+		reverse_proxy {$FRONTEND_UPSTREAM}
+	}
+}

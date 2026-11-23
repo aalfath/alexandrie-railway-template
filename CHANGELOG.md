@@ -1,5 +1,9 @@
 # Changelog
 
+## 8.14.4 (2026-11-23, README)
+
+No breaking changes and no app change. Added the Deploy on Railway button for the published template `alexandrie-1` to the README. Nothing to do when you apply this update.
+
 ## 8.14.4 (2026-11-23)
 
 First release of this template.
